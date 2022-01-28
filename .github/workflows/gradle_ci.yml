@@ -14,8 +14,8 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
-
+  build-test:
+    name: Build & Test
     runs-on: ubuntu-latest
 
     steps:
@@ -25,7 +25,13 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
-    - name: Build with Gradle
+    - name: Build & Test with Gradle
       uses: gradle/gradle-build-action@4137be6a8bf7d7133955359dbd952c0ca73b1021
       with:
         arguments: build
+        
+    - name: Publish Unit Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v1
+      if: always()
+      with:
+        files: build/test-results/**/*.xml
